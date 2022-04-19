@@ -19,6 +19,9 @@ class Post
     #[ORM\Column(type: 'text')]
     private $description;
 
+    #[ORM\Column(type: 'string', length: 255)]
+    private $fileName;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -44,6 +47,18 @@ class Post
     public function setDescription(string $description): self
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    public function getFileName(): ?string
+    {
+        return $this->fileName;
+    }
+
+    public function setFileName(string $fileName): self
+    {
+        $this->fileName = $fileName;
 
         return $this;
     }

@@ -17,45 +17,66 @@ class FormController extends AbstractController
     public function index(Request $request, ManagerRegistry $doctrine): Response
     {
         # Add new Post
-        // $post = new Post();
+        $post = new Post();
 
-        // # $post->setTitle('Welcome');
-        // # $post->setDescription('Hello Ji.. This is my description');
-
-        // $form = $this->createForm(PostType::class, $post, [
-        //     'action' => $this->generateUrl('app_form')
-        // ]);
-
-        // // handle the request
-        // $form->handleRequest($request);
-
-        // if ($form->isSubmitted() && $form->isValid()) {
-        //     # Saving to the database
-        //     //dd($post);
-
-        //     $em = $doctrine->getManager();
-        //     $em->persist($post);
-        //     $em->flush();
-        // }
-        # End Add new Post
-
-        # Remove specific Post
-        $em = $doctrine->getManager();
-        $post = $em->getRepository(Post::class)->findOneBy([
-            'id' => 4
-        ]);
+        # $post->setTitle('Welcome');
+        # $post->setDescription('Hello Ji.. This is my description');
 
         $form = $this->createForm(PostType::class, $post, [
             'action' => $this->generateUrl('app_form')
         ]);
-        $form->handleRequest($request);
 
-        $em->remove($post);
-        $em->flush();
-        # End Remove specific Post
+        // handle the request
+        $form->handleRequest($request);
+        $image = '22c41712bc6438ed6bd8963083c4fbff.png';
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $file = $request->files->get('post')['my_file'];
+
+            $uploads_directory = $this->getParameter('uploads_directory');
+
+            $filename = md5(uniqid()) . '.' .  $file->guessExtension();
+            
+            $file->move(
+                $uploads_directory,
+                $filename
+            );
+            // echo("<pre>");
+            // dd($file);
+            # Saving to the database
+            //dd($post);
+
+            $em = $doctrine->getManager();
+            $post->setFileName($filename);
+            $em->persist($post);
+            $em->flush();
+
+            $this->addFlash(
+                'notice',
+                'Your changes were saved!'
+            );
+        }
+        # End Add new Post
+
+        # Remove specific Post
+        // $em = $doctrine->getManager();
+        // $post = $em->getRepository(Post::class)->findOneBy([
+        //     'id' => 4
+        // ]);
+
+        // $form = $this->createForm(PostType::class, $post, [
+        //     'action' => $this->generateUrl('app_form')
+        // ]);
+        // $form->handleRequest($request);
+
+        // $em->remove($post);
+        // $em->flush();
+        // # End Remove specific Post
 
         return $this->render('form/index.html.twig', [
-            'post_form' => $form->createView()
+            'post_form' => $form->createView(),
+            'image' => $image
         ]);
     }
 }

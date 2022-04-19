@@ -5,7 +5,10 @@
 {% endblock %}
 
 {% block body %}
+    {# Concatenation in Twig can be done via Tilde sign (~) #}
+    <img src="{{ asset('uploads/') ~ image }}"> 
     {{ form_start(post_form, {'attr' : {'id' : 'custom_post_form'}}) }}
         {{ form_start(post_form) }}
+            {# {{ form_row(post_form.my_file) }} #}
     {{ form_end(post_form) }}
 {% endblock %}

@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Post;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -25,6 +26,10 @@ class PostType extends AbstractType
                 'attr' => [
                     'placeholder' => 'Enter the Description here..'
                 ]
+            ])
+            ->add('my_file', FileType::class, [
+                'mapped' => false,
+                'label' => 'Please upload a file'
             ])
             ->add('save', SubmitType::class, [
                 'attr' => [
